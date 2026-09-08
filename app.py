@@ -61,5 +61,17 @@ if search_clicked:
         time.sleep(1)
         news_items = []
     if news_items:
-        found_count = len(news
-                          
+        found_count = len(news_items)
+        st.success(f"Найдено: {found_count}")
+        for item in news_items:
+            title = item.get('title', 'Без заголовка')
+            date = item.get('date', 'Дата не указана')
+            snippet = item.get('snippet', 'Описание отсутствует')
+            html = f"<div class='news-card'><b>{title}</b><br><small>{date}</small><p>{snippet}</p></div>"
+            st.markdown(html, unsafe_allow_html=True)
+    else:
+        st.warning("Ничего не найдено")
+else:
+    st.info("Нажмите кнопку для поиска")
+
+st.markdown
