@@ -12,23 +12,97 @@ st.set_page_config(
 
 # Кастомные стили
 st.markdown("""
-    <style>
-    .main-header {
-        font-size: 24px;
-        font-weight: 600;
-        color: #1F2937;
-        margin-bottom: 0px;
-    }
-    .news-card {
-        background: #FFFFFF;
-        border-radius: 8px;
-        padding: 15px;
-        margin-bottom: 15px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-        border-left: 4px solid #5B7C3E;
-    }
-    .news-title {
-        font-size: 16px;
-        font-weight: 600;
-        color: #1F2937;
-        margin
+<style>
+.main-header {
+    font-size: 24px;
+    font-weight: 600;
+    color: #1F2937;
+    margin-bottom: 0px;
+}
+.news-card {
+    background: #FFFFFF;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    border-left: 4px solid #5B7C3E;
+}
+.news-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1F2937;
+    margin-bottom: 8px;
+}
+.news-meta {
+    font-size: 12px;
+    color: #6B7280;
+    margin-bottom: 8px;
+}
+.news-snippet {
+    font-size: 14px;
+    color: #6B7280;
+    line-height: 1.5;
+}
+.stButton>button {
+    background-color: #5B7C3E;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-weight: 500;
+}
+.stButton>button:hover {
+    background-color: #4a6632;
+}
+[data-testid="stSidebar"] .stButton>button {
+    background-color: #5B7C3E;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-weight: 500;
+    width: 100%;
+}
+[data-testid="stSidebar"] .stButton>button:hover {
+    background-color: #4a6632;
+}
+[data-testid="stMain"] {
+    background-color: #c5e1a5;
+}
+</style>
+""", unsafe_allow_html=True)
+
+# === Шапка: логотип на всю ширину ===
+logo_path = "logo_combined.png"
+
+if Path(logo_path).exists():
+    st.image(logo_path, width=900)
+else:
+    st.markdown("🔬")
+
+# Название и дата под логотипом
+col_title, col_date = st.columns([8, 2])
+
+with col_title:
+    st.markdown('<p class="main-header">IPTT News Monitor</p>', unsafe_allow_html=True)
+
+with col_date:
+    date_str = datetime.now().strftime('%d.%m.%Y')
+    st.markdown(
+        "<p style='text-align: right; color: #6B7280; font-size: 13px;'>"
+        date_str + "</p>",
+        unsafe_allow_html=True
+    )
+
+st.markdown("---")
+
+# Боковая панель с настройками
+with st.sidebar:
+    st.header("🔧 Настройки поиска")
+    
+    search_clicked = st.button(" Запустить поиск", use_container_width=True)
+    
+    keywords = st.text_input(
+        "Ключевые слова",
+        value="пектин, пищевые волокна",
+        help="В
