@@ -3,15 +3,9 @@ from datetime import datetime
 from pathlib import Path
 import time
 
-st.set_page_config(page_title="IPTT News Monitor", page_icon="", layout="wide")
+st.set_page_config(page_title="IPTT News Monitor", layout="wide")
 
-st.markdown("""
-<style>
-.main-header {font-size: 24px; font-weight: 600; color: #1F2937;}
-.news-card {background: #FFFFFF; border-radius: 8px; padding: 15px; margin-bottom: 15px; border-left: 4px solid #5B7C3E;}
-[data-testid="stMain"] {background-color: #c5e1a5;}
-</style>
-""", unsafe_allow_html=True)
+st.markdown("<style>[data-testid='stMain'] {background-color: #c5e1a5;}</style>", unsafe_allow_html=True)
 
 col_logo, col_title, col_date = st.columns([3, 5, 2])
 
@@ -20,10 +14,11 @@ with col_logo:
         st.image("logo_combined.png", width=250)
 
 with col_title:
-    st.markdown('<p class="main-header">IPTT News Monitor</p>', unsafe_allow_html=True)
+    st.markdown("## IPTT News Monitor")
 
 with col_date:
-    st.markdown(f"<p style='text-align:right;color:#6B7280;font-size:13px;'>{datetime.now().strftime('%d.%m.%Y')}</p>", unsafe_allow_html=True)
+    today = datetime.now().strftime("%d.%m.%Y")
+    st.markdown(today)
 
 st.markdown("---")
 
@@ -62,16 +57,19 @@ if search_clicked:
         news_items = []
     if news_items:
         found_count = len(news_items)
-        st.success(f"Найдено: {found_count}")
+        st.success("Найдено: " + str(found_count))
         for item in news_items:
-            title = item.get('title', 'Без заголовка')
-            date = item.get('date', 'Дата не указана')
-            snippet = item.get('snippet', 'Описание отсутствует')
-            html = f"<div class='news-card'><b>{title}</b><br><small>{date}</small><p>{snippet}</p></div>"
-            st.markdown(html, unsafe_allow_html=True)
+            title = item.get("title", "Без заголовка")
+            date = item.get("date", "Дата не указана")
+            snippet = item.get("snippet", "Описание отсутствует")
+            st.markdown("**" + title + "**")
+            st.markdown("*" + date + "*")
+            st.markdown(snippet)
+            st.markdown("---")
     else:
         st.warning("Ничего не найдено")
 else:
     st.info("Нажмите кнопку для поиска")
 
-st.markdown
+st.markdown("---")
+st.markdown("*IPTT News Monitor 2026*")
