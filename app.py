@@ -1,13 +1,12 @@
 import streamlit as st
-import requests
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
 import time
 
 # Настройка страницы
 st.set_page_config(
     page_title="IPTT News Monitor",
-    page_icon="🔬",
+    page_icon="",
     layout="wide"
 )
 
@@ -76,7 +75,7 @@ col1, col2, col3 = st.columns([1, 6, 2])
 
 with col1:
     if Path(logo_path).exists():
-        st.image(logo_path, width=40)
+        st.image(logo_path, width=120)
     else:
         st.markdown("🔬")
 
@@ -115,30 +114,31 @@ with st.sidebar:
     )
     
     limit = st.slider("Количество новостей", 5, 50, 10)
-st.markdown("---")
-
-if st.button("🔗 Ссылки на проект", use_container_width=True):
-    st.markdown("#### 📌 Основные ресурсы:")
-    st.markdown("– [PectinWorld](https://pectinworld.com/)")
-    st.markdown("– [Университет 2035](https://pt.2035.university/project/sozdanie-promyslennogo-proizvodstva-pektina-i-pisevyh-volokon_2021_05_28_04_41_27#pulse260038)")
     
-    st.markdown("#### 🏆 Платформы и конкурсы:")
-    st.markdown("– [BRICS Awards](https://bricsawards.tech/practices/18402)")
-    st.markdown("– [Сильные идеи](https://xn--d1ach8g.xn--c1aenmdblfega.xn--p1ai/improject-145438/ideas/211734)")
-    st.markdown("– [РСХБ/Цифра](https://rshbdigital.ru/ekspertiza-i-tekhnologii/almanah/startups/promyshlennoe-proizvodstvo-pektina-i-pishhevykh-volokon)")
-    st.markdown("– [Радар НТИ](https://pt.u2035test.ru/project/sozdanie-promyslennogo-proizvodstva-pektina-i-pisevyh-volokon_2021_05_28_04_41_27)")
-    st.markdown("– [АТР Каталог технологий](https://atr.gov.ru/tech/623041940492)")
+    # === Кнопка со ссылками ===
+    st.markdown("---")
     
-    st.markdown("#### 📺 Видео и медиа:")
-    st.markdown("– [Дзен канал РИАЦ 34](https://dzen.ru/a/Za9RopsN-Bbk_oAT)")
-    st.markdown("– [Видео на Rutube](https://rutube.ru/video/21d1e3ed5b92f8b2a09d6e9334feab0c/)")
-    st.markdown("– [Видео на Яндекс](https://ya.ru/video/preview/11803489309973110150)")
+    if st.button("🔗 Ссылки на проект", use_container_width=True):
+        st.markdown("#### 📌 Основные ресурсы:")
+        st.markdown("– [PectinWorld](https://pectinworld.com/)")
+        st.markdown("– [Университет 2035](https://pt.2035.university/project/sozdanie-promyslennogo-proizvodstva-pektina-i-pisevyh-volokon_2021_05_28_04_41_27#pulse260038)")
+        
+        st.markdown("####  Платформы и конкурсы:")
+        st.markdown("– [BRICS Awards](https://bricsawards.tech/practices/18402)")
+        st.markdown("– [Сильные идеи](https://xn--d1ach8g.xn--c1aenmdblfega.xn--p1ai/improject-145438/ideas/211734)")
+        st.markdown("– [РСХБ/Цифра](https://rshbdigital.ru/ekspertiza-i-tekhnologii/almanah/startups/promyshlennoe-proizvodstvo-pektina-i-pishhevykh-volokon)")
+        st.markdown("– [Радар НТИ](https://pt.u2035test.ru/project/sozdanie-promyslennogo-proizvodstva-pektina-i-pisevyh-volokon_2021_05_28_04_41_27)")
+        st.markdown("– [АТР Каталог технологий](https://atr.gov.ru/tech/623041940492)")
+        
+        st.markdown("#### 📺 Видео и медиа:")
+        st.markdown("– [Дзен канал РИАЦ 34](https://dzen.ru/a/Za9RopsN-Bbk_oAT)")
+        st.markdown("– [Видео на Rutube](https://rutube.ru/video/21d1e3ed5b92f8b2a09d6e9334feab0c/)")
+        st.markdown("– [Видео на Яндекс](https://ya.ru/video/preview/11803489309973110150)")
     
     st.markdown("---")
     st.markdown("### О сервисе")
     st.info("Поиск новостей по заданным ключевым словам из различных источников")
     
-    # Кнопка теперь будет оливковой благодаря CSS для сайдбара
     search_clicked = st.button("🔍 Запустить поиск", use_container_width=True)
 
 # Основная область
@@ -163,7 +163,7 @@ if search_clicked:
         time.sleep(0.5)
         
         # Заглушка для демонстрации
-        news_items = [] 
+        news_items = []
         
         progress_bar.progress(100)
         status_text.text("Готово!")
@@ -176,3 +176,34 @@ if search_clicked:
             st.success(f"Найдено {len(news_items)} новостей")
             
             for item in news_items:
+                st.markdown(f"""
+                    <div class="news-card">
+                        <div class="news-title">{item.get('title', 'Заголовок')}</div>
+                        <div class="news-meta">
+                             {item.get('date', 'Дата не указана')} | 
+                            🔗 {item.get('source', 'Источник')}
+                        </div>
+                        <div class="news-snippet">{item.get('snippet', 'Описание')}</div>
+                    </div>
+                """, unsafe_allow_html=True)
+        else:
+            st.warning("📭 Ничего не найдено")
+            st.info("💡 Попробуйте:\n– Расширить период поиска\n– Изменить ключевые слова\n– Выбрать другой источник")
+            
+    except Exception as e:
+        st.error(f"❌ Ошибка при поиске: {str(e)}")
+        st.info("Проверьте подключение к интернету и повторите попытку")
+
+else:
+    st.info("Нажмите кнопку в меню слева, чтобы начать поиск новостей")
+
+# Футер
+st.markdown("---")
+st.markdown(
+    """
+    <div style='text-align: center; color: #6B7280; font-size: 12px;'>
+        IPTT News Monitor · 2026 · Версия 1.0
+    </div>
+    """, 
+    unsafe_allow_html=True
+)
