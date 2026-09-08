@@ -28,43 +28,46 @@ with col_date:
 st.markdown("---")
 
 with st.sidebar:
-    st.header("Настройки")
-    search_clicked = st.button("Запустить поиск", use_container_width=True)
-    keywords = st.text_input("Ключевые слова", value="пектин, пищевые волокна")
-    add_source = st.text_input("Добавить источник", value="")
+    st.header("Settings")
+    search_clicked = st.button("Search", use_container_width=True)
+    keywords = st.text_input("Keywords", value="pectin, dietary fiber")
+    add_source = st.text_input("Add source", value="")
     
     if add_source:
-        source_options = ["Google News", "Яндекс Новости", "Все источники", add_source]
+        source_options = ["Google News", "Yandex News", "All sources", add_source]
     else:
-        source_options = ["Google News", "Яндекс Новости", "Все источники"]
+        source_options = ["Google News", "Yandex News", "All sources"]
     
-    source = st.selectbox("Источник", source_options)
-    period = st.selectbox("Период", ["Сегодня", "Неделя", "Месяц", "Год"])
-    limit = st.slider("Количество", 5, 50, 10)
+    source = st.selectbox("Source", source_options)
+    period = st.selectbox("Period", ["Today", "Week", "Month", "Year"])
+    limit = st.slider("Number", 5, 50, 10)
     
     st.markdown("---")
     
     if "show_links" not in st.session_state:
         st.session_state.show_links = False
     
-    if st.button("Ссылки", use_container_width=True):
+    if st.button("Links", use_container_width=True):
         st.session_state.show_links = not st.session_state.show_links
     
     if st.session_state.show_links:
         st.markdown("- [PectinWorld](https://pectinworld.com/)")
-        st.markdown("- [Университет 2035](https://pt.2035.university/project/sozdanie-promyslennogo-proizvodstva-pektina-i-pisevyh-volokon_2021_05_28_04_41_27)")
+        st.markdown("- [University 2035](https://pt.2035.university/project/sozdanie-promyslennogo-proizvodstva-pektina-i-pisevyh-volokon_2021_05_28_04_41_27)")
 
-st.markdown("### Новости")
+st.markdown("### News")
 
 if search_clicked:
-    with st.spinner("Ищу..."):
+    with st.spinner("Searching..."):
         time.sleep(1)
         news_items = []
     if news_items:
-        st.success(f"Найдено: {len(news_items)}")
+        st.success(f"Found: {len(news_items)}")
         for item in news_items:
             st.markdown(f"<div class='news-card'><b>{item.get('title')}</b><br><small>{item.get('date')}</small><p>{item.get('snippet')}</p></div>", unsafe_allow_html=True)
     else:
-        st.warning("Ничего не найдено")
+        st.warning("Nothing found")
 else:
-    st.info("Нажмите кнопку
+    st.info("Click button to search")
+
+st.markdown("---")
+st.markdown("*IPTT News Monitor 2026*")
