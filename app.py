@@ -3,14 +3,12 @@ from datetime import datetime
 from pathlib import Path
 import time
 
-# Настройка страницы
 st.set_page_config(
     page_title="IPTT News Monitor",
     page_icon="🔬",
     layout="wide"
 )
 
-# Кастомные стили
 st.markdown("""
 <style>
 .main-header {
@@ -72,15 +70,13 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# === Шапка: логотип на всю ширину ===
 logo_path = "logo_combined.png"
 
 if Path(logo_path).exists():
     st.image(logo_path, width=900)
 else:
-    st.markdown("🔬")
+    st.markdown("")
 
-# Название и дата под логотипом
 col_title, col_date = st.columns([8, 2])
 
 with col_title:
@@ -89,135 +85,19 @@ with col_title:
 with col_date:
     date_str = datetime.now().strftime('%d.%m.%Y')
     st.markdown(
-        "<p style='text-align: right; color: #6B7280; font-size: 13px;'>"
-        date_str + "</p>",
+        f"<p style='text-align: right; color: #6B7280; font-size: 13px;'>{date_str}</p>",
         unsafe_allow_html=True
     )
 
 st.markdown("---")
 
-# Боковая панель с настройками
 with st.sidebar:
-    st.header("🔧 Настройки поиска")
+    st.header("Настройки поиска")
     
-    search_clicked = st.button(" Запустить поиск", use_container_width=True)
+    search_clicked = st.button("Запустить поиск", use_container_width=True)
     
     keywords = st.text_input(
         "Ключевые слова",
         value="пектин, пищевые волокна",
         help="Введите ключевые слова через запятую"
-    )
-    
-    source = st.selectbox(
-        "Источник поиска",
-        ["Google News", "Яндекс Новости", "Все источники"],
-        index=0
-    )
-    
-    custom_source = st.text_input(
-        "Добавить источник",
-        value="",
-        help="Введите URL или название дополнительного источника"
-    )
-    
-    period = st.selectbox(
-        "Период",
-        ["Сегодня", "Неделя", "Месяц", "Год"],
-        index=1
-    )
-    
-    limit = st.slider("Количество новостей", 5, 50, 10)
-    
-    st.markdown("---")
-    
-    if 'show_links' not in st.session_state:
-        st.session_state.show_links = False
-    
-    if st.button("🔗 Ссылки на проект", use_container_width=True):
-        st.session_state.show_links = not st.session_state.show_links
-    
-    if st.session_state.show_links:
-        st.markdown("####  Основные ресурсы:")
-        st.markdown("– [PectinWorld](https://pectinworld.com/)")
-        st.markdown("– [Университет 2035](https://pt.2035.university/project/sozdanie-promyslennogo-proizvodstva-pektina-i-pisevyh-volokon_2021_05_28_04_41_27#pulse260038)")
-        
-        st.markdown("#### 🏆 Платформы и конкурсы:")
-        st.markdown("– [BRICS Awards](https://bricsawards.tech/practices/18402)")
-        st.markdown("– [Сильные идеи](https://xn--d1ach8g.xn--c1aenmdblfega.xn--p1ai/improject-145438/ideas/211734)")
-        st.markdown("– [РСХБ/Цифра](https://rshbdigital.ru/ekspertiza-i-tekhnologii/almanah/startups/promyshlennoe-proizvodstvo-pektina-i-pishhevykh-volokon)")
-        st.markdown("– [Радар НТИ](https://pt.u2035test.ru/project/sozdanie-promyslennogo-proizvodstva-pektina-i-pisevyh-volokon_2021_05_28_04_41_27)")
-        st.markdown("– [АТР Каталог технологий](https://atr.gov.ru/tech/623041940492)")
-        
-        st.markdown("#### 📺 Видео и медиа:")
-        st.markdown("– [Дзен канал РИАЦ 34](https://dzen.ru/a/Za9RopsN-Bbk_oAT)")
-        st.markdown("– [Видео на Rutube](https://rutube.ru/video/21d1e3ed5b92f8b2a09d6e9334feab0c/)")
-        st.markdown("– [Видео на Яндекс](https://ya.ru/video/preview/11803489309973110150)")
-    
-    st.markdown("---")
-    st.markdown("### О сервисе")
-    st.info("Поиск новостей по заданным ключевым словам из различных источников")
-
-# Основная область
-st.markdown("###  Свежие новости")
-
-if search_clicked:
-    progress_bar = st.progress(0)
-    status_text = st.empty()
-    
-    try:
-        status_text.text("Инициализация поиска...")
-        progress_bar.progress(25)
-        time.sleep(0.5)
-        
-        status_text.text("Поиск источников...")
-        progress_bar.progress(50)
-        time.sleep(0.5)
-        
-        status_text.text("Анализ результатов...")
-        progress_bar.progress(75)
-        time.sleep(0.5)
-        
-        news_items = []
-        
-        progress_bar.progress(100)
-        status_text.text("Готово!")
-        time.sleep(0.5)
-        
-        progress_bar.empty()
-        status_text.empty()
-        
-        if news_items:
-            st.success(f"Найдено {len(news_items)} новостей")
-            
-            for item in news_items:
-                st.markdown(f"""
-                    <div class="news-card">
-                        <div class="news-title">{item.get('title', 'Заголовок')}</div>
-                        <div class="news-meta">
-                            {item.get('date', 'Дата не указана')} | 
-                            {item.get('source', 'Источник')}
-                        </div>
-                        <div class="news-snippet">{item.get('snippet', 'Описание')}</div>
-                    </div>
-                """, unsafe_allow_html=True)
-        else:
-            st.warning("📭 Ничего не найдено")
-            st.info(" Попробуйте:\n– Расширить период поиска\n– Изменить ключевые слова\n– Выбрать другой источник")
-            
-    except Exception as e:
-        st.error(f"❌ Ошибка при поиске: {str(e)}")
-        st.info("Проверьте подключение к интернету и повторите попытку")
-
-else:
-    st.info("Нажмите кнопку в меню слева, чтобы начать поиск новостей")
-
-# Футер
-st.markdown("---")
-st.markdown(
-    """
-    <div style='text-align: center; color: #6B7280; font-size: 12px;'>
-        IPTT News Monitor · 2026 · Версия 1.0
-    </div>
-    """, 
-    unsafe_allow_html=True
-)
+   
