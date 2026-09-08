@@ -61,4 +61,5 @@ if search_clicked:
         time.sleep(1)
         news_items = []
     if news_items:
-        st.success(f"Найдено:
+        found_count = len(news
+                          
